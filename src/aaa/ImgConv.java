@@ -42,7 +42,7 @@ public class ImgConv {
 		}
 		MyFrame frame = new MyFrame("ShrimpMaker");
 		;
-		frame.setBounds((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() - 200), 0, 200, 120);
+		frame.setBounds((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() - 200), 0, 200, 150);
 
 		// ウィンドウを表示する
 		frame.setVisible(true);
@@ -53,7 +53,7 @@ public class ImgConv {
 		/**
 		 * 
 		 */
-		String outputFilePath = "out.docx";
+		String outputFileExtension = ".docx";
 		XWPFDocument document = null;
 		XWPFParagraph paragraph;
 		XWPFRun run;
@@ -64,12 +64,7 @@ public class ImgConv {
 		ArrayList<String> a = new ArrayList<String>();
 		ArrayList<Image> imgs = new ArrayList<Image>();
 		private static final long serialVersionUID = 1L;
-		private int num = 100;
-
-		public int getNum() {
-			return num;
-		}
-
+		
 		MyFrame(String title) {
 
 			setTitle(title);
@@ -77,13 +72,15 @@ public class ImgConv {
 			JButton btn_cap = new JButton("cap");
 			JButton btn_write = new JButton("write");
 			JTextField text1 = new JTextField("", 100);
-			JLabel label = new JLabel(new ImageIcon("C:/Users/y-kikuya/Pictures/IMG_0" + getNum() + ".jpg"));
+			JTextField filename = new JTextField("", 100);
+			JLabel label = new JLabel(new ImageIcon());
 
 			BoxLayout boxlayout = new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS);
 			this.setLayout(boxlayout);
-			this.add(btn_cap);
-			this.add(btn_write);
 			this.add(text1);
+			this.add(btn_cap);
+			this.add(filename);
+			this.add(btn_write);
 			getContentPane().add(label);
 
 			//書き込みボタンが押されたら
@@ -101,14 +98,25 @@ public class ImgConv {
 							run = paragraph.createRun();
 
 							run.setText(cnt + "." + i);
-							paragraph = document.createParagraph();
+							run.addCarriageReturn();  //改行
 							paragraph = document.createParagraph();
 							InputStream pic = new FileInputStream("./ShrimpMaker_tmp/" + cnt + ".jpg");
 							run.addPicture(pic, Document.PICTURE_TYPE_JPEG, "", Units.toEMU(400),
 									Units.toEMU(400 * SSize.getHeight() / SSize.getWidth()));
 						}
+						String outputFilePath;
+						if(filename.getText().equals("") || filename.getText().isEmpty()) {
+							outputFilePath = "output.docx";
+						} else {
+							outputFilePath = filename.getText() + outputFileExtension;
+						}
 						fout = new FileOutputStream(outputFilePath);
 						document.write(fout);
+						//arraylistに入っている出力済み情報をクリア
+						imgnum = 1;
+						a.clear();
+						imgs.clear();
+						
 						System.out.println("エビデンス生成成功");
 					} catch (FileNotFoundException e1) {
 						// TODO Auto-generated catch block
@@ -131,6 +139,7 @@ public class ImgConv {
 					SSize = screenSize;
 					Robot r2d2;
 					String text = text1.getText();
+					text1.setText("");
 					a.add(text);
 					try {
 						r2d2 = new Robot();
