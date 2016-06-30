@@ -42,7 +42,7 @@ public class ImgConv {
 		}
 		MyFrame frame = new MyFrame("ShrimpMaker");
 		;
-		frame.setBounds((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() - 200), 0, 200, 150);
+		frame.setBounds((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() - 200), 0, 200, 230);
 
 		// ウィンドウを表示する
 		frame.setVisible(true);
@@ -145,7 +145,7 @@ public class ImgConv {
 						r2d2 = new Robot();
 						BufferedImage img = r2d2.createScreenCapture(new Rectangle(screenSize));
 						Image display_img = img.getScaledInstance(
-								(int) (img.getWidth(label) * 792 / img.getWidth(label)), -1, Image.SCALE_SMOOTH);
+								(int) (img.getWidth(label) * 200 / img.getWidth(label)), -1, Image.SCALE_SMOOTH);
 
 						label.setIcon(new ImageIcon(display_img));
 						imgs.add(img);
